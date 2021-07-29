@@ -7,9 +7,9 @@ function Calculator() {
           <ul className="calculator__list">
             <li className="calculator__item">
               <label className="calculator__label" htmlFor="number">У меня есть</label>
-              <input className="calculator__input" type="text" id="number" name="number"/>
+              <input className="calculator__input" type="text" id="number" name="number" defaultValue="1000"/>
               <label className="visually-hidden" htmlFor="currency">currency</label>
-              <select name="currency" id="currency" defaultValue="RUB">
+              <select className="calculator__input calculator__input--currency" name="currency" id="currency" defaultValue="RUB">
                 <option value="RUB">RUB</option>
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
@@ -19,9 +19,9 @@ function Calculator() {
             </li>
             <li className="calculator__item">
               <label className="calculator__label" htmlFor="number">Хочу приобрести</label>
-              <input className="calculator__input" type="text" id="number" name="number"/>
+              <input className="calculator__input" type="text" id="number" name="number" defaultValue="13,1234"/>
               <label className="visually-hidden" htmlFor="currency">currency</label>
-              <select name="currency" id="currency" defaultValue="USD">
+              <select className="calculator__input calculator__input--currency" name="currency" id="currency" defaultValue="USD">
                 <option value="RUB">RUB</option>
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
@@ -32,8 +32,8 @@ function Calculator() {
           </ul>
           <div className="calculator__submit-box">
             <div className="calculator__calendar">
-              <label htmlFor="time">Выберите дату</label>
-              <input type="text" id="time" name="time"/>
+              <label className="visually-hidden" htmlFor="time">Выберите дату</label>
+              <input className="calculator__input calculator__input--calendar" type="text" id="time" name="time" defaultValue="1.12.2020"/>
             </div>
             <button className="calculator__save-btn">Сохранить результат</button>
           </div>
