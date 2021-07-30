@@ -1,8 +1,20 @@
+@import "colors"
+
 html
   font-family: "Roboto", "Arial", sans-serif
+  height: 100%
 
 body
   margin: 0
+  height: 100%
+
+#root
+  height: 100%
+
+.app
+  height: 100%
+  display: grid
+  grid-template-rows: min-content min-content auto
 
 h1, h2, h3
   margin: 0
@@ -16,4 +28,12 @@ p
 
 a
   text-decoration: none
+
+.app__header,
+.app__footer
+  background-color: $alt-white
+  padding-bottom: 15px
+
+.app__footer
+  margin-top: 102px
 
