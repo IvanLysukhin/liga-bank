@@ -23,8 +23,8 @@ function Calculator({saveButtonHandler, results}) {
     saveButtonHandler([{
       id: state.id + 1,
       date: state.date,
-      startNumber: state.have,
-      endNumber: state.want,
+      startNumber: state.have.toString(),
+      endNumber: state.want.toString(),
       startCurrency: state.haveCurrency,
       endCurrency: state.wantCurrency,
     }, ...results]);
