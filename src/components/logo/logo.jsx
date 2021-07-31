@@ -1,3 +1,5 @@
+import React from 'react';
+
 function Logo() {
   return (
     <a className="logo" href="#">
@@ -9,7 +11,8 @@ function Logo() {
         <path d="M15 10.1463L9.75 19.2927H20.25L15 10.1463Z" fill="#2C36F2"/>
         <path
           d="M27.25 26H2.75L1 22.3415M27.25 26L29 22.3415L16.75 1M27.25 26L16.75 7.09756L15 10.1463M16.75 1H13.8333L1 22.3415M16.75 1L6.54167 19.2927M1 22.3415H4.79167M15 10.1463L9.75 19.2927M15 10.1463L20.25 19.2927M9.75 19.2927H20.25M9.75 19.2927H6.54167M20.25 19.2927L22 22.3415H4.79167M6.54167 19.2927L4.79167 22.3415"
-          stroke="#F6F7FF"/>
+          stroke="#F6F7FF"
+        />
       </svg>
       <p className="logo__text"><span className="logo__span">ЛИГА</span>Банк</p>
     </a>

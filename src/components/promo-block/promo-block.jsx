@@ -1,3 +1,5 @@
+import React from 'react';
+
 function PromoBlock() {
   return (
     <section className="app__section promo-block">

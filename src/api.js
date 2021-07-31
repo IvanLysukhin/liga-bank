@@ -1,28 +1,22 @@
-import dayjs from "dayjs";
-
 export const getCurrency = (startCurrency, endCurrency, setCurrency, setState, currentState, date = 'latest') => {
   const start = startCurrency.toLowerCase();
   const end = endCurrency.toLowerCase();
-  let currency = {};
-  console.log(date);
+  const currency = {};
+
   fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${date}/currencies/${end}/${start}.json`)
-    .then((response) => {
-      return response.json()
-    })
-    .then((data) => {
-      return {
+    .then((response) => response.json())
+    .then((data) => (
+      {
         ...currency,
         wantToHave: data[start],
       }
-    })
-    .then((currency) => {
+    ))
+    .then((newCurrency) => {
       fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${date}/currencies/${start}/${end}.json`)
-        .then((response) => {
-          return response.json()
-        })
+        .then((response) => response.json())
         .then((second) => {
           setCurrency({
-            ...currency,
+            ...newCurrency,
             haveToWant: second[end],
           });
 
@@ -30,6 +24,6 @@ export const getCurrency = (startCurrency, endCurrency, setCurrency, setState, c
             ...currentState,
             want: currentState.have * second[end],
           });
-        })
-    })
-}
+        });
+    });
+};

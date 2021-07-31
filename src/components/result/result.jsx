@@ -1,11 +1,26 @@
-function Result() {
+import {formatNumber} from '../../utils';
+import React from 'react';
+import {resultProp} from '../../prop-types/prop-types';
+
+function Result({result}) {
+
+  const {date, startNumber, endNumber, startCurrency, endCurrency} = result;
+
   return (
     <li className="results-list__item">
-      <p className="results-list__text results-list__text--time">25.11.2020</p>
-      <p className="results-list__text results-list__text--start-value">1000 RUB</p>
-      <p className="results-list__text results-list__text--end-value">13,1234 USD</p>
+      <p className="results-list__text results-list__text--time">{date}</p>
+      <p className="results-list__text results-list__text--start-value">
+        {`${formatNumber(startNumber)} ${startCurrency}`}
+      </p>
+      <p className="results-list__text results-list__text--end-value">
+        {`${formatNumber(endNumber)} ${endCurrency}`}
+      </p>
     </li>
   );
 }
+
+Result.propTypes = {
+  result: resultProp,
+};
 
 export default Result;

@@ -1,21 +1,42 @@
-import {useRef, useState, useEffect} from "react";
-import {Currency} from "../../constants";
-import {getCurrency} from "../../api";
-import flatpickr from "flatpickr";
-import dayjs from "dayjs";
+import React, {useRef, useState, useEffect} from 'react';
+import {Currency} from '../../constants';
+import {getCurrency} from '../../api';
+import flatpickr from 'flatpickr';
+import dayjs from 'dayjs';
+import PropTypes from 'prop-types';
+import {resultProp} from '../../prop-types/prop-types';
 
-function Calculator() {
+function Calculator({saveButtonHandler, results}) {
   const [state, setState] = useState({
+    id: 0,
     have: '',
     want: '',
     haveCurrency: Currency.RUB,
     wantCurrency: Currency.USD,
     date: new Date().toLocaleDateString(),
-  })
-  const [currency, setCurrency] = useState({})
+  });
+
+  const [currency, setCurrency] = useState({});
+
+  const onSaveButtonClickHandler = (evt) => {
+    evt.preventDefault();
+    saveButtonHandler([{
+      id: state.id + 1,
+      date: state.date,
+      startNumber: state.have,
+      endNumber: state.want,
+      startCurrency: state.haveCurrency,
+      endCurrency: state.wantCurrency,
+    }, ...results]);
+
+    setState({
+      ...state,
+      id: state.id + 1,
+    });
+  };
 
   useEffect(() => {
-    getCurrency(state.haveCurrency, state.wantCurrency, setCurrency, setState, state, state.requestDate)
+    getCurrency(state.haveCurrency, state.wantCurrency, setCurrency, setState, state, state.requestDate);
   }, [state.haveCurrency, state.wantCurrency, state.requestDate]);
 
   const haveInput = useRef();
@@ -25,7 +46,7 @@ function Calculator() {
   let calendar;
 
   useEffect(() => {
-    calendar  = flatpickr(timeInput.current,{
+    calendar = flatpickr(timeInput.current, {
       dateFormat: 'd.m.Y',
       ariaDateFormat: 'Y-m-d',
       maxDate: new Date(),
@@ -35,24 +56,24 @@ function Calculator() {
           ...state,
           date: timeInput.current.value,
           requestDate: dayjs(selectedDates).format('YYYY-MM-DD'),
-        })
+        });
       },
     });
-  })
+  });
 
   const onHaveCurrencyChangeHandler = ({target}) => {
     setState({
       ...state,
       have: '',
       want: '',
-      haveCurrency: target.value
+      haveCurrency: target.value,
     });
   };
 
   const onWantCurrencyChangeHandler = ({target}) => {
     setState({
       ...state,
-      wantCurrency: target.value
+      wantCurrency: target.value,
     });
   };
 
@@ -60,7 +81,7 @@ function Calculator() {
     setState({
       ...state,
       have: target.value,
-      want: target.value * currency.haveToWant
+      want: target.value * currency.haveToWant,
     });
   };
 
@@ -79,10 +100,7 @@ function Calculator() {
   return (
     <section className="app__section calculator">
       <div className="calculator__wrapper">
-        <h2 className="calculator__title" onClick={() => {
-          console.log(state)
-          console.log(currency)
-        }}>Конвертер валют</h2>
+        <h2 className="calculator__title">Конвертер валют</h2>
         <form className="calculator__form" action="#">
           <ul className="calculator__list">
             <li className="calculator__item">
@@ -152,12 +170,22 @@ function Calculator() {
                 onClick={onTimeInputClick}
               />
             </div>
-            <button className="calculator__save-btn">Сохранить результат</button>
+            <button
+              className="calculator__save-btn"
+              onClick={onSaveButtonClickHandler}
+            >
+              Сохранить результат
+            </button>
           </div>
         </form>
       </div>
     </section>
   );
 }
+
+Calculator.propTypes = {
+  saveButtonHandler: PropTypes.func.isRequired,
+  results: PropTypes.arrayOf(resultProp).isRequired,
+};
 
 export default Calculator;
