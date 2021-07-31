@@ -1,9 +1,10 @@
 import {useRef, useState, useEffect} from "react";
 import {Currency} from "../../constants";
 import {getCurrency} from "../../api";
+import flatpickr from "flatpickr";
+import dayjs from "dayjs";
 
 function Calculator() {
-
   const [state, setState] = useState({
     have: '',
     want: '',
@@ -11,20 +12,39 @@ function Calculator() {
     wantCurrency: Currency.USD,
     date: new Date().toLocaleDateString(),
   })
-   const [currency, setCurrency] = useState({
-   })
+  const [currency, setCurrency] = useState({})
 
   useEffect(() => {
-    getCurrency(state.haveCurrency,state.wantCurrency, setCurrency, setState, state)
-  }, [state.haveCurrency,state.wantCurrency]);
+    getCurrency(state.haveCurrency, state.wantCurrency, setCurrency, setState, state, state.requestDate)
+  }, [state.haveCurrency, state.wantCurrency, state.requestDate]);
 
   const haveInput = useRef();
   const wantInput = useRef();
+  const timeInput = useRef();
+
+  let calendar;
+
+  useEffect(() => {
+    calendar  = flatpickr(timeInput.current,{
+      dateFormat: 'd.m.Y',
+      ariaDateFormat: 'Y-m-d',
+      maxDate: new Date(),
+      minDate: dayjs(new Date()).add(-7, 'day').format('DD.MM.YYYY'),
+      onChange: (selectedDates) => {
+        setState({
+          ...state,
+          date: timeInput.current.value,
+          requestDate: dayjs(selectedDates).format('YYYY-MM-DD'),
+        })
+      },
+    });
+  })
 
   const onHaveCurrencyChangeHandler = ({target}) => {
     setState({
       ...state,
       have: '',
+      want: '',
       haveCurrency: target.value
     });
   };
@@ -32,7 +52,6 @@ function Calculator() {
   const onWantCurrencyChangeHandler = ({target}) => {
     setState({
       ...state,
-      // want: '',
       wantCurrency: target.value
     });
   };
@@ -53,12 +72,16 @@ function Calculator() {
     });
   };
 
+  const onTimeInputClick = () => {
+    calendar.open();
+  };
+
   return (
     <section className="app__section calculator">
       <div className="calculator__wrapper">
         <h2 className="calculator__title" onClick={() => {
-          console.log(currency)
           console.log(state)
+          console.log(currency)
         }}>Конвертер валют</h2>
         <form className="calculator__form" action="#">
           <ul className="calculator__list">
@@ -118,8 +141,16 @@ function Calculator() {
           <div className="calculator__submit-box">
             <div className="calculator__calendar">
               <label className="visually-hidden" htmlFor="time">Выберите дату</label>
-              <input className="calculator__input calculator__input--calendar" type="text" id="time" name="time"
-                     defaultValue={state.date}/>
+              <input
+                className="calculator__input calculator__input--calendar"
+                type="text"
+                id="time"
+                name="time"
+                readOnly
+                defaultValue={state.date}
+                ref={timeInput}
+                onClick={onTimeInputClick}
+              />
             </div>
             <button className="calculator__save-btn">Сохранить результат</button>
           </div>

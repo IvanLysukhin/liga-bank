@@ -1,8 +1,10 @@
+import dayjs from "dayjs";
+
 export const getCurrency = (startCurrency, endCurrency, setCurrency, setState, currentState, date = 'latest') => {
   const start = startCurrency.toLowerCase();
   const end = endCurrency.toLowerCase();
   let currency = {};
-
+  console.log(date);
   fetch(`https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/${date}/currencies/${end}/${start}.json`)
     .then((response) => {
       return response.json()
