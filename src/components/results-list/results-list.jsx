@@ -1,9 +1,18 @@
 import Result from '../result/result';
 import React from 'react';
-import PropTypes from 'prop-types';
-import {resultProp} from '../../prop-types/prop-types';
+import {useSelector} from 'react-redux';
+import {getResults} from '../../store/selectors';
+import {useDispatch} from 'react-redux';
+import {clearResults} from '../../store/actions';
 
-function ResultsList({results, resetButtonHandler}) {
+function ResultsList() {
+  const dispatch = useDispatch();
+  const results = useSelector(getResults);
+
+  const onClearBtnHandler = () => {
+    dispatch(clearResults());
+  };
+
   return (
     <section className="app__section results-list">
       <div className="results-list__wrapper">
@@ -14,20 +23,12 @@ function ResultsList({results, resetButtonHandler}) {
       </ul>
       <button
         className="results-list__reset-btn"
-        onClick={() => {
-          resetButtonHandler([]);
-        }}
+        onClick={onClearBtnHandler}
       >
         Очистить историю
       </button>
     </section>
   );
 }
-
-
-ResultsList.propTypes = {
-  results: PropTypes.arrayOf(resultProp),
-  resetButtonHandler: PropTypes.func.isRequired,
-};
 
 export default ResultsList;

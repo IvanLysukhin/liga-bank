@@ -1,12 +1,13 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {Currency} from '../../constants';
-import {getCurrency} from '../../api';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
-import {resultProp} from '../../prop-types/prop-types';
+import {useDispatch, useSelector} from 'react-redux';
+import {saveResult} from '../../store/actions';
+import {fetchCurrencyRates, fetchCurrencyRatesEnd} from '../../axios/api-actions';
+import {getEndRate, getStartRate} from '../../store/selectors';
 
-function Calculator({saveButtonHandler, results}) {
+function Calculator() {
   const [state, setState] = useState({
     id: 0,
     have: '',
@@ -16,18 +17,21 @@ function Calculator({saveButtonHandler, results}) {
     date: new Date().toLocaleDateString(),
   });
 
-  const [currency, setCurrency] = useState({});
+  const startRate = useSelector(getStartRate);
+  const endRate = useSelector(getEndRate);
+  const dispatch = useDispatch();
 
   const onSaveButtonClickHandler = (evt) => {
     evt.preventDefault();
-    saveButtonHandler([{
+
+    dispatch(saveResult({
       id: state.id + 1,
       date: state.date,
       startNumber: state.have.toString(),
       endNumber: state.want.toString(),
       startCurrency: state.haveCurrency,
       endCurrency: state.wantCurrency,
-    }, ...results]);
+    }));
 
     setState({
       ...state,
@@ -36,7 +40,8 @@ function Calculator({saveButtonHandler, results}) {
   };
 
   useEffect(() => {
-    getCurrency(state.haveCurrency, state.wantCurrency, setCurrency, setState, state, state.requestDate);
+    dispatch(fetchCurrencyRatesEnd(state.requestDate, state.haveCurrency, state.wantCurrency));
+    dispatch(fetchCurrencyRates(state.requestDate, state.haveCurrency, state.wantCurrency));
   }, [state.haveCurrency, state.wantCurrency, state.requestDate]);
 
   const haveInput = useRef();
@@ -44,6 +49,13 @@ function Calculator({saveButtonHandler, results}) {
   const timeInput = useRef();
 
   let calendar;
+
+  useEffect(() => {
+    setState({
+      ...state,
+      want: state.have * startRate,
+    });
+  }, [startRate]);
 
   useEffect(() => {
     calendar = flatpickr(timeInput.current, {
@@ -81,14 +93,14 @@ function Calculator({saveButtonHandler, results}) {
     setState({
       ...state,
       have: target.value,
-      want: target.value * currency.haveToWant,
+      want: target.value * startRate,
     });
   };
 
   const onWantInputHandler = ({target}) => {
     setState({
       ...state,
-      have: target.value * currency.wantToHave,
+      have: target.value * endRate,
       want: target.value,
     });
   };
@@ -182,10 +194,5 @@ function Calculator({saveButtonHandler, results}) {
     </section>
   );
 }
-
-Calculator.propTypes = {
-  saveButtonHandler: PropTypes.func.isRequired,
-  results: PropTypes.arrayOf(resultProp).isRequired,
-};
 
 export default Calculator;
