@@ -23,7 +23,6 @@
   background-repeat: no-repeat
   background-position: center top 61px
 
-
 .calculator__submit-box
   flex-grow: 1
   display: flex
@@ -51,6 +50,15 @@
   border: 1px solid $main-black
   border-radius: 4px
 
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button,
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button
+    -webkit-appearance: none
+    margin: 0
+
+  &[type="number"]
+    -moz-appearance: textfield
 
   &--currency
     font-size: 30px
@@ -75,6 +83,7 @@
     background-repeat: no-repeat
     background-position: right 18px center
     cursor: pointer
+
 .calculator__submit-box
   margin-top: 70px
 

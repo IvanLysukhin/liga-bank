@@ -8,11 +8,11 @@ function Result({result}) {
 
   return (
     <li className="results-list__item">
-      <p className="results-list__text results-list__text--time">{date}</p>
-      <p className="results-list__text results-list__text--start-value">
+      <p className="app__text results-list__text results-list__text--time">{date}</p>
+      <p className="app__text results-list__text results-list__text--start-value">
         {`${formatNumber(startNumber)} ${startCurrency}`}
       </p>
-      <p className="results-list__text results-list__text--end-value">
+      <p className="app__text results-list__text results-list__text--end-value">
         {`${formatNumber(endNumber)} ${endCurrency}`}
       </p>
     </li>

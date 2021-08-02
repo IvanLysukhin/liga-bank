@@ -1,10 +1,17 @@
 import {createReducer} from '@reduxjs/toolkit';
-import {saveResult, clearResults, loadStartCurrency, loadEndCurrency} from './actions';
+import {
+  saveResult,
+  clearResults,
+  loadStartCurrency,
+  loadEndCurrency,
+  loadData
+} from './actions';
 
 const initialState = {
   results: [],
   startCurrency: 0,
   endCurrency: 0,
+  isDataLoad: false,
 };
 
 export const reducer = createReducer(initialState, (builder) => {
@@ -20,5 +27,8 @@ export const reducer = createReducer(initialState, (builder) => {
     })
     .addCase(loadEndCurrency, (state, action) => {
       state.endCurrency = action.payload;
+    })
+    .addCase(loadData, (state, action) => {
+      state.isDataLoad = action.payload;
     });
 });

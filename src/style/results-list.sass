@@ -1,7 +1,5 @@
 @import "colors"
 
-
-
 .results-list
   width: 1028px
   margin: 0 auto
@@ -40,23 +38,31 @@
   display: flex
   justify-content: space-between
   margin-bottom: 25px
-  background-image: url("../img/arrow-rigth.svg")
-  background-repeat: no-repeat
-  background-position-x: 219px
 
   &:nth-of-type(2n)
     margin-left: 10px
 
 .results-list__text
   flex-grow: 1
+  display: block
+  height: min-content
 
   &--time
     flex-grow: 0
     width: 91px
-    margin-right: 39px
 
   &--start-value
     text-align: left
+    padding-right: 13px
+    padding-left: 39px
+    position: relative
+
+    &:after
+      content: url("../img/arrow-rigth.svg")
+      position: absolute
+      right: 0
+      top: 0
+      margin-right: -10px
 
   &--end-value
     display: block

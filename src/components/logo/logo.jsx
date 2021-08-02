@@ -2,7 +2,7 @@ import React from 'react';
 
 function Logo() {
   return (
-    <a className="logo" href="#">
+    <a className="app__link logo" href="#">
       <svg width="30" height="27" viewBox="0 0 30 27" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M16.75 1H13.8333L1 22.3415H4.79167L6.54167 19.2927L16.75 1Z" fill="#2C36F2"/>
         <path d="M2.75 26H27.25L16.75 7.09756L15 10.1463L20.25 19.2927L22 22.3415H4.79167H1L2.75 26Z" fill="#2C36F2"/>
@@ -14,7 +14,7 @@ function Logo() {
           stroke="#F6F7FF"
         />
       </svg>
-      <p className="logo__text"><span className="logo__span">ЛИГА</span>Банк</p>
+      <p className="app__text logo__text"><span className="logo__span">ЛИГА</span>Банк</p>
     </a>
   );
 }
