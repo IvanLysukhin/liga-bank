@@ -1,12 +1,13 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {Currency} from '../../constants';
-import {getCurrency} from '../../api';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
-import PropTypes from 'prop-types';
-import {resultProp} from '../../prop-types/prop-types';
+import {useDispatch, useSelector} from 'react-redux';
+import {loadData, saveResult} from '../../store/actions';
+import {fetchCurrencyRates, fetchCurrencyRatesEnd} from '../../axios/api-actions';
+import {getEndRate, getLoadStatus, getStartRate} from '../../store/selectors';
 
-function Calculator({saveButtonHandler, results}) {
+function Calculator() {
   const [state, setState] = useState({
     id: 0,
     have: '',
@@ -16,18 +17,32 @@ function Calculator({saveButtonHandler, results}) {
     date: new Date().toLocaleDateString(),
   });
 
-  const [currency, setCurrency] = useState({});
+  const haveInput = useRef();
+  const wantInput = useRef();
+  const timeInput = useRef();
+
+  const startRate = useSelector(getStartRate);
+  const endRate = useSelector(getEndRate);
+  const loadStatus = useSelector(getLoadStatus);
+  const dispatch = useDispatch();
+
+  let calendar;
 
   const onSaveButtonClickHandler = (evt) => {
     evt.preventDefault();
-    saveButtonHandler([{
+
+    if (state.have <= 0 || state.want <= 0) {
+      return;
+    }
+
+    dispatch(saveResult({
       id: state.id + 1,
       date: state.date,
       startNumber: state.have.toString(),
       endNumber: state.want.toString(),
       startCurrency: state.haveCurrency,
       endCurrency: state.wantCurrency,
-    }, ...results]);
+    }));
 
     setState({
       ...state,
@@ -35,15 +50,57 @@ function Calculator({saveButtonHandler, results}) {
     });
   };
 
+  const onHaveCurrencyChangeHandler = ({target}) => {
+    setState({
+      ...state,
+      have: '',
+      want: '',
+      haveCurrency: target.value,
+    });
+
+    dispatch(loadData(false));
+  };
+
+  const onWantCurrencyChangeHandler = ({target}) => {
+    setState({
+      ...state,
+      wantCurrency: target.value,
+    });
+
+    dispatch(loadData(false));
+  };
+
+  const onHaveInputHandler = ({target}) => {
+    setState({
+      ...state,
+      have: target.value,
+      want: target.value * startRate,
+    });
+  };
+
+  const onWantInputHandler = ({target}) => {
+    setState({
+      ...state,
+      have: target.value * endRate,
+      want: target.value,
+    });
+  };
+
+  const onTimeInputClick = () => {
+    calendar.open();
+  };
+
   useEffect(() => {
-    getCurrency(state.haveCurrency, state.wantCurrency, setCurrency, setState, state, state.requestDate);
+    dispatch(fetchCurrencyRatesEnd(state.requestDate, state.haveCurrency, state.wantCurrency));
+    dispatch(fetchCurrencyRates(state.requestDate, state.haveCurrency, state.wantCurrency));
   }, [state.haveCurrency, state.wantCurrency, state.requestDate]);
 
-  const haveInput = useRef();
-  const wantInput = useRef();
-  const timeInput = useRef();
-
-  let calendar;
+  useEffect(() => {
+    setState({
+      ...state,
+      want: state.have * startRate,
+    });
+  }, [startRate]);
 
   useEffect(() => {
     calendar = flatpickr(timeInput.current, {
@@ -61,48 +118,12 @@ function Calculator({saveButtonHandler, results}) {
     });
   });
 
-  const onHaveCurrencyChangeHandler = ({target}) => {
-    setState({
-      ...state,
-      have: '',
-      want: '',
-      haveCurrency: target.value,
-    });
-  };
-
-  const onWantCurrencyChangeHandler = ({target}) => {
-    setState({
-      ...state,
-      wantCurrency: target.value,
-    });
-  };
-
-  const onHaveInputHandler = ({target}) => {
-    setState({
-      ...state,
-      have: target.value,
-      want: target.value * currency.haveToWant,
-    });
-  };
-
-  const onWantInputHandler = ({target}) => {
-    setState({
-      ...state,
-      have: target.value * currency.wantToHave,
-      want: target.value,
-    });
-  };
-
-  const onTimeInputClick = () => {
-    calendar.open();
-  };
-
   return (
     <section className="app__section calculator">
       <div className="calculator__wrapper">
-        <h2 className="calculator__title">Конвертер валют</h2>
+        <h2 className="app__title calculator__title">Конвертер валют</h2>
         <form className="calculator__form" action="#">
-          <ul className="calculator__list">
+          <ul className="app__list calculator__list">
             <li className="calculator__item">
               <label className="calculator__label" htmlFor="haveNumber">У меня есть</label>
               <input
@@ -172,9 +193,10 @@ function Calculator({saveButtonHandler, results}) {
             </div>
             <button
               className="calculator__save-btn"
+              disabled={!loadStatus}
               onClick={onSaveButtonClickHandler}
             >
-              Сохранить результат
+              {loadStatus ? 'Сохранить результат' : 'Загрузка...'}
             </button>
           </div>
         </form>
@@ -182,10 +204,5 @@ function Calculator({saveButtonHandler, results}) {
     </section>
   );
 }
-
-Calculator.propTypes = {
-  saveButtonHandler: PropTypes.func.isRequired,
-  results: PropTypes.arrayOf(resultProp).isRequired,
-};
 
 export default Calculator;

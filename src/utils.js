@@ -5,7 +5,7 @@ export const formatNumber = (num) => {
 
     if (formatNum >= 1000000) {
 
-      return `${formatNum / 1000000}M`;
+      return `${Math.floor(formatNum) / 1000000}M`;
     }
 
     return Math.floor(formatNum);

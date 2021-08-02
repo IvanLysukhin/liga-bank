@@ -8,7 +8,7 @@ body
   margin: 0
   height: 100%
 
-#root
+.root
   height: 100%
 
 .app
@@ -16,17 +16,17 @@ body
   display: grid
   grid-template-rows: min-content min-content auto
 
-h1, h2, h3
+.app__title
   margin: 0
 
-ul
+.app__list
   list-style: none
   padding: 0
 
-p
+.app__text
   margin: 0
 
-a
+.app__link
   text-decoration: none
 
 .app__header,
@@ -36,20 +36,3 @@ a
 
 .app__footer
   margin-top: 102px
-
-
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button
-  -webkit-appearance: none
-  margin: 0
-
-input[type="number"]
-  -moz-appearance: textfield
-
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button
-  -webkit-appearance: none
-  margin: 0
-
-
