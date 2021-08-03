@@ -6,7 +6,7 @@ import {
   loadEndCurrency,
   loadData
 } from './actions';
-import {RESULTS_MAX_NUMBER} from "../constants";
+import {RESULTS_MAX_NUMBER} from '../constants';
 
 const initialState = {
   results: [],
