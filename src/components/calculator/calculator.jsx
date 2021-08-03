@@ -1,5 +1,5 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {Currency} from '../../constants';
+import {Currency, DATE_RANGE} from '../../constants';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 import {useDispatch, useSelector} from 'react-redux';
@@ -107,12 +107,20 @@ function Calculator() {
       dateFormat: 'd.m.Y',
       ariaDateFormat: 'Y-m-d',
       maxDate: new Date(),
-      minDate: dayjs(new Date()).add(-7, 'day').format('DD.MM.YYYY'),
+      minDate: dayjs(new Date()).add(-DATE_RANGE, 'day').format('DD.MM.YYYY'),
       onChange: (selectedDates) => {
+
+        let calendarDates = dayjs(selectedDates).format('YYYY-MM-DD');
+        const todayDate = dayjs(new Date()).format('YYYY-MM-DD');
+
+        if (calendarDates === todayDate) {
+          calendarDates = 'latest';
+        }
+
         setState({
           ...state,
           date: timeInput.current.value,
-          requestDate: dayjs(selectedDates).format('YYYY-MM-DD'),
+          requestDate: calendarDates,
         });
       },
     });
