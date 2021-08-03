@@ -7,7 +7,7 @@ export const Currency = {
 };
 
 export const DATE_RANGE = 7;
-export const RESULTS_MAX_NUMBER = 7;
+export const RESULTS_MAX_NUMBER = 10;
 
 export const TEN_THOUSANDS_LIMIT = 10000;
 export const MILLION_LIMIT = 1000000;

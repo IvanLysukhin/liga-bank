@@ -6,6 +6,7 @@ import {
   loadEndCurrency,
   loadData
 } from './actions';
+import {RESULTS_MAX_NUMBER} from "../constants";
 
 const initialState = {
   results: [],
@@ -17,7 +18,7 @@ const initialState = {
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(saveResult, (state, action) => {
-      state.results = [action.payload, ...state.results];
+      state.results = [action.payload, ...state.results].slice(0, RESULTS_MAX_NUMBER);
     })
     .addCase(clearResults, (state, action) => {
       state.results = [];

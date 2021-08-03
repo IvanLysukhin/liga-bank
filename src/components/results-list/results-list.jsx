@@ -4,7 +4,6 @@ import {useSelector} from 'react-redux';
 import {getResults} from '../../store/selectors';
 import {useDispatch} from 'react-redux';
 import {clearResults} from '../../store/actions';
-import {RESULTS_MAX_NUMBER} from '../../constants';
 
 function ResultsList() {
   const dispatch = useDispatch();
@@ -20,7 +19,7 @@ function ResultsList() {
         <h2 className="app__title results-list__title">История конвертация</h2>
       </div>
       <ul className="app__list results-list__list">
-        {results.slice(0, RESULTS_MAX_NUMBER).map((result) => <Result result={result} key={result.id}/>)}
+        {results.map((result) => <Result result={result} key={result.id}/>)}
       </ul>
       <button
         className="results-list__reset-btn"
