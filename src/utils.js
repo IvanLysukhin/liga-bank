@@ -1,24 +1,34 @@
+import {
+  MAX_POINT_NUMBER_LENGTH,
+  MILLION_LIMIT,
+  MIN_POINT_NUMBER_LENGTH,
+  POINT_NUMBER_LIMIT,
+  TEN_THOUSANDS_LIMIT
+} from './constants';
+
 export const formatNumber = (num) => {
   const formatNum = Number(num);
 
-  if (formatNum > 10000) {
+  if (formatNum > TEN_THOUSANDS_LIMIT) {
 
-    if (formatNum >= 1000000) {
+    if (formatNum >= MILLION_LIMIT) {
 
-      return `${Math.floor(formatNum) / 1000000}M`;
+      return `${Math.floor(formatNum) / MILLION_LIMIT}M`;
     }
 
     return Math.floor(formatNum);
   }
 
-  if (formatNum.toString().split('.')[1]) {
+  const numberAfterPoint = formatNum.toString().split('.')[1];
 
-    if (formatNum.toString().split('.')[1].length < 3) {
+  if (numberAfterPoint) {
 
-      return formatNum.toFixed(2);
+    if (numberAfterPoint.length < POINT_NUMBER_LIMIT) {
+
+      return formatNum.toFixed(MIN_POINT_NUMBER_LENGTH);
     }
 
-    return formatNum.toFixed(4);
+    return formatNum.toFixed(MAX_POINT_NUMBER_LENGTH);
   }
 
   return formatNum;
